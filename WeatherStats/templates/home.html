@@ -1,0 +1,78 @@
+<section class="vh-100">
+    <div class="container py-5 h-100">
+  
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-md-8 col-lg-6 col-xl-4">
+  
+          <h3 class="mb-4 pb-2 fw-normal">Check the weather forecast</h3>
+          
+          <form method="post">
+            {%csrf_token%}
+            <div class="input-group rounded mb-3">
+              <input type="search" class="form-control rounded" placeholder="City" aria-label="Search"
+                aria-describedby="search-addon" name="city"/>
+              <button type="submit">
+                <span class="input-group-text border-0 fw-bold" id="search-addon">
+                  Check!
+                </span>
+              </button>
+            </div>
+          </form>
+
+          <div class="mb-4 pb-2">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="temperatureUnit" id="celsiusRadio"
+                value="celsius" checked />
+              <label class="form-check-label" for="celsiusRadio" name="cels">Celsius</label>
+            </div>
+  
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="temperatureUnit" id="fahrenheitRadio"
+                value="fahrenheit" />
+              <label class="form-check-label" for="fahrenheitRadio" name="farh">Fahrenheit</label>
+            </div>
+          </div>
+  
+          <div class="card shadow-0 border">
+            <div class="card-body p-4">
+  
+              <h4 class="mb-1 sfw-normal">{{country}}
+              <p id="temperature" class="mb-2">Current temperature: <strong>{{current_temp_f}}</strong></p>
+              <p>Icon: <strong>{{icon}}</strong></p>
+  
+              <div class="d-flex flex-row align-items-center">
+                <p class="mb-0 me-4">Condition: {{condition}}</p>
+                <i class="fas fa-cloud fa-3x" style="color: #eee;"></i>
+              </div>
+  
+            </div>
+          </div>
+  
+        </div>
+      </div>
+  
+    </div>
+</section>
+
+<script>
+  function updateTemperature() {
+    const temperatureElement = document.getElementById("temperature");
+    const currentTempCelsius = parseFloat("{{current_temp_c}}");
+    const currentTempFahrenheit = parseFloat("{{current_temp_f}}")
+
+    const temperatureUnit = document.querySelector('input[name="temperatureUnit"]:checked').value;
+
+    if (temperatureUnit === "celsius") {
+            temperatureElement.innerHTML = `Current temperature: <strong>${currentTempCelsius}°C</strong>`;
+        } else if (temperatureUnit === "fahrenheit") {
+            temperatureElement.innerHTML = `Current temperature: <strong>${currentTempFahrenheit}°F</strong>`;
+        }
+  }
+
+  const radioButtons = document.querySelectorAll('input[name="temperatureUnit"]');
+    radioButtons.forEach(function(radioButton) {
+        radioButton.addEventListener("change", updateTemperature);
+    });
+  
+    updateTemperature()
+</script>
